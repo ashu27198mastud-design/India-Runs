@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { Download, FileText, AlertTriangle, Briefcase, Eye, Loader2, Play } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export default function Home() {
   const [candidates, setCandidates] = useState<any[]>([]);
@@ -34,6 +36,51 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const exportToPDF = () => {
+    if (candidates.length === 0) {
+      alert("No candidates to export. Please run the AI ranking first.");
+      return;
+    }
+
+    const doc = new jsPDF();
+    
+    // Title
+    doc.setFontSize(20);
+    doc.text("RANKFORGE AI - Candidate Report", 14, 22);
+    
+    // Subtitle
+    doc.setFontSize(11);
+    doc.text("Role: Senior GRC Analyst", 14, 30);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 36);
+
+    // Table
+    const tableColumn = ["Rank", "Name", "Role", "Fit", "Risk", "Evidence"];
+    const tableRows: any[] = [];
+
+    candidates.forEach(candidate => {
+      const candidateData = [
+        candidate.rank,
+        candidate.candidateName,
+        candidate.currentRole,
+        `${candidate.overallFitScore}%`,
+        `${candidate.riskScore}%`,
+        candidate.keyEvidence.substring(0, 50) + "..."
+      ];
+      tableRows.push(candidateData);
+    });
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 45,
+      theme: 'grid',
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [16, 185, 129] } // Emerald color
+    });
+
+    doc.save("RANKFORGE_AI_Candidates.pdf");
   };
 
   return (
@@ -83,7 +130,10 @@ export default function Home() {
               {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Play size={16} />}
               {isLoading ? "AI is Thinking..." : "Run AI Ranking"}
             </button>
-            <button className="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold rounded-lg transition-colors shadow-lg shadow-emerald-500/20">
+            <button 
+              onClick={exportToPDF}
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold rounded-lg transition-colors shadow-lg shadow-emerald-500/20"
+            >
               <Download size={16} />
               Export PDF
             </button>
