@@ -1,8 +1,32 @@
-import React from 'react';
-import { Download, FileText, AlertTriangle, Briefcase, Eye } from 'lucide-react';
+"use client";
 
-// A mock dashboard UI that fulfills the prompt requirements for UI export buttons and a premium dark theme.
+import React, { useState } from 'react';
+import { Download, FileText, AlertTriangle, Briefcase, Eye, Loader2, Play } from 'lucide-react';
+
 export default function Home() {
+  const [candidates, setCandidates] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const runAIRanking = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/rank');
+      const json = await res.json();
+      
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'Failed to fetch rankings');
+      }
+      
+      setCandidates(json.data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-emerald-500/30">
       {/* Navbar */}
@@ -40,23 +64,23 @@ export default function Home() {
             </p>
           </div>
           
-          {/* Required Export Buttons */}
-          <div className="grid grid-cols-2 gap-3 min-w-[300px]">
+          {/* Action Buttons */}
+          <div className="grid grid-cols-2 md:flex md:flex-row gap-3 min-w-[300px]">
+            <button 
+              onClick={runAIRanking}
+              disabled={isLoading}
+              className="flex items-center justify-center gap-2 px-6 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 disabled:opacity-50 text-white font-semibold rounded-lg transition-all shadow-lg shadow-indigo-500/20"
+            >
+              {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Play size={16} />}
+              {isLoading ? "AI is Thinking..." : "Run AI Ranking"}
+            </button>
             <button className="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold rounded-lg transition-colors shadow-lg shadow-emerald-500/20">
               <Download size={16} />
               Export PDF
             </button>
             <button className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium rounded-lg transition-colors">
               <Briefcase size={16} />
-              Hiring Brief
-            </button>
-            <button className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium rounded-lg transition-colors">
-              <Eye size={16} />
-              Compare
-            </button>
-            <button className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium rounded-lg transition-colors">
-              <FileText size={16} />
-              Audit Log
+              Brief
             </button>
           </div>
         </section>
@@ -71,11 +95,23 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Error State */}
+        {error && (
+          <div className="p-4 bg-red-950/30 border border-red-500/50 rounded-lg text-red-400">
+            Error: {error}
+          </div>
+        )}
+
         {/* Mock Candidates Table */}
         <section className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
-            <h3 className="font-semibold text-lg">AI-Ranked Candidates</h3>
-            <span className="text-sm text-slate-400">10 Candidates Scored</span>
+            <h3 className="font-semibold text-lg flex items-center gap-2">
+              AI-Ranked Candidates
+              {isLoading && <Loader2 size={16} className="animate-spin text-emerald-400" />}
+            </h3>
+            <span className="text-sm text-slate-400">
+              {candidates.length > 0 ? `${candidates.length} Candidates Scored` : "Awaiting AI Execution"}
+            </span>
           </div>
           
           <div className="overflow-x-auto">
@@ -85,102 +121,86 @@ export default function Home() {
                   <th className="px-6 py-4 font-medium">Rank</th>
                   <th className="px-6 py-4 font-medium">Candidate</th>
                   <th className="px-6 py-4 font-medium">Overall Fit</th>
-                  <th className="px-6 py-4 font-medium">Evidence</th>
-                  <th className="px-6 py-4 font-medium">Risk</th>
+                  <th className="px-6 py-4 font-medium">Evidence Score</th>
+                  <th className="px-6 py-4 font-medium">Risk Score</th>
                   <th className="px-6 py-4 font-medium">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800">
-                {/* Dummy Row 1 */}
-                <tr className="hover:bg-slate-800/20 transition-colors">
-                  <td className="px-6 py-4">
-                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
-                      1
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <p className="font-bold text-white">Alex Mercer</p>
-                    <p className="text-slate-400 text-xs">Lead GRC Consultant • 8 Yrs</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden">
-                        <div className="bg-emerald-400 h-full w-[95%]"></div>
+                
+                {isLoading && Array.from({ length: 3 }).map((_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="px-6 py-4"><div className="w-8 h-8 bg-slate-800 rounded-full"></div></td>
+                    <td className="px-6 py-4"><div className="w-32 h-4 bg-slate-800 rounded mb-2"></div><div className="w-24 h-3 bg-slate-800 rounded"></div></td>
+                    <td className="px-6 py-4"><div className="w-24 h-2 bg-slate-800 rounded-full"></div></td>
+                    <td className="px-6 py-4"><div className="w-12 h-4 bg-slate-800 rounded"></div></td>
+                    <td className="px-6 py-4"><div className="w-12 h-4 bg-slate-800 rounded"></div></td>
+                    <td className="px-6 py-4"><div className="w-24 h-8 bg-slate-800 rounded"></div></td>
+                  </tr>
+                ))}
+
+                {!isLoading && candidates.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
+                      <p className="mb-2">No candidates ranked yet.</p>
+                      <button 
+                        onClick={runAIRanking}
+                        className="text-indigo-400 hover:text-indigo-300 underline font-medium"
+                      >
+                        Click here to run the intelligence engine
+                      </button>
+                    </td>
+                  </tr>
+                )}
+
+                {!isLoading && candidates.map((candidate, idx) => (
+                  <tr key={idx} className="hover:bg-slate-800/20 transition-colors">
+                    <td className="px-6 py-4">
+                      <span className={`flex items-center justify-center w-8 h-8 rounded-full font-bold border ${
+                        idx === 0 ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 
+                        idx === 1 ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' : 
+                        'bg-slate-800 text-slate-300 border-slate-700'
+                      }`}>
+                        {candidate.rank}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <p className="font-bold text-white">{candidate.candidateName}</p>
+                      <p className="text-slate-400 text-xs">{candidate.currentRole} • {candidate.totalExperienceYears} Yrs</p>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full ${candidate.overallFitScore >= 90 ? 'bg-emerald-400' : candidate.overallFitScore >= 70 ? 'bg-amber-400' : 'bg-red-400'}`}
+                            style={{ width: `${candidate.overallFitScore}%` }}
+                          ></div>
+                        </div>
+                        <span className={`font-medium ${candidate.overallFitScore >= 90 ? 'text-emerald-400' : candidate.overallFitScore >= 70 ? 'text-amber-400' : 'text-red-400'}`}>
+                          {candidate.overallFitScore}%
+                        </span>
                       </div>
-                      <span className="font-medium text-emerald-400">95%</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-emerald-400">High</td>
-                  <td className="px-6 py-4 text-emerald-400">Low</td>
-                  <td className="px-6 py-4">
-                    <button className="text-xs font-medium bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded transition-colors text-white">
-                      Review Evidence
-                    </button>
-                  </td>
-                </tr>
-                {/* Dummy Row 2 */}
-                <tr className="hover:bg-slate-800/20 transition-colors bg-indigo-950/10">
-                  <td className="px-6 py-4">
-                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 font-bold border border-indigo-500/30">
-                      2
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-white">Jamie Lin</p>
-                      <span className="text-[10px] uppercase font-bold bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/30">Hidden Gem</span>
-                    </div>
-                    <p className="text-slate-400 text-xs">InfoSec Analyst • 4 Yrs</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden">
-                        <div className="bg-indigo-400 h-full w-[88%]"></div>
-                      </div>
-                      <span className="font-medium text-indigo-400">88%</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-emerald-400">Med</td>
-                  <td className="px-6 py-4 text-emerald-400">Low</td>
-                  <td className="px-6 py-4">
-                    <button className="text-xs font-medium bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded transition-colors text-white">
-                      Review Evidence
-                    </button>
-                  </td>
-                </tr>
-                {/* Dummy Row 3 */}
-                <tr className="hover:bg-slate-800/20 transition-colors">
-                  <td className="px-6 py-4">
-                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 text-slate-300 font-bold border border-slate-700">
-                      3
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <p className="font-bold text-white">Taylor Swift</p>
-                    <p className="text-slate-400 text-xs">Cyber Risk Mgr • 9 Yrs</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden">
-                        <div className="bg-amber-400 h-full w-[85%]"></div>
-                      </div>
-                      <span className="font-medium text-amber-400">85%</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-rose-400">Low</td>
-                  <td className="px-6 py-4 text-rose-400">High (Overfit)</td>
-                  <td className="px-6 py-4">
-                    <button className="text-xs font-medium bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded transition-colors text-white">
-                      Review Evidence
-                    </button>
-                  </td>
-                </tr>
+                    </td>
+                    <td className="px-6 py-4 text-emerald-400">{candidate.evidenceScore}%</td>
+                    <td className="px-6 py-4 text-rose-400">{candidate.riskScore}%</td>
+                    <td className="px-6 py-4">
+                      <button 
+                        className="text-xs font-medium bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded transition-colors text-white"
+                        title={candidate.keyEvidence}
+                      >
+                        Review Evidence
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-          <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/50 text-center">
-            <p className="text-xs text-slate-500">Showing top 3 of 10 candidates. Export full list to PDF for detailed metrics.</p>
-          </div>
+          {candidates.length > 0 && (
+            <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/50 text-center">
+              <p className="text-xs text-slate-500">Showing all {candidates.length} processed candidates. Review generated PDF for deep insights.</p>
+            </div>
+          )}
         </section>
       </main>
     </div>
