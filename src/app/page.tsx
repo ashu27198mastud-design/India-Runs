@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, FileText, CheckCircle, AlertTriangle, Briefcase, Eye } from 'lucide-react';
+import { Download, FileText, AlertTriangle, Briefcase, Eye } from 'lucide-react';
 
 // A mock dashboard UI that fulfills the prompt requirements for UI export buttons and a premium dark theme.
 export default function Home() {

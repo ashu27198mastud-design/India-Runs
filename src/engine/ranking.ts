@@ -1,3 +1,4 @@
+import { Schema } from '@google/genai';
 import { getGenAIClient } from './googleGenAI';
 import candidates from '../data/mockDataset.json';
 
@@ -71,7 +72,7 @@ export async function rankCandidates(): Promise<RankedCandidate[]> {
       contents: prompt,
       config: {
         responseMimeType: "application/json",
-        responseSchema: responseSchema as any,
+        responseSchema: responseSchema as Schema,
         temperature: 0.2, // Low temperature for consistent scoring
       }
     });
