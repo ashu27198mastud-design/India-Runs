@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RANKFORGE AI - Approach Deck</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            page-break-after: always;
+            box-sizing: border-box;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid #1e293b;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.05), transparent 50%);
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.05em;
+            background: linear-gradient(to right, #6366f1, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: #f1f5f9;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 0.5rem;
+        }
+
+        p, ul, li {
+            font-size: 1.5rem;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+        }
+
+        .tagline {
+            font-size: 2rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 2rem;
+            left: 4rem;
+            right: 4rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: #475569;
+            z-index: 1;
+        }
+
+        /* Grid layout for features */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1 -->
+    <div class="slide">
+        <div class="content text-center" style="text-align: center;">
+            <div style="font-size: 5rem; margin-bottom: 1rem;">⚡</div>
+            <h1>RANKFORGE AI</h1>
+            <p class="tagline">Beyond filtering. Evidence-backed candidate intelligence.</p>
+            <div style="margin-top: 4rem; padding: 2rem; border-top: 1px solid #334155;">
+                <p style="font-size: 1.25rem;"><strong>Challenge:</strong> Intelligent Candidate Discovery</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+        <div class="content">
+            <h2>The Problem with Traditional ATS</h2>
+            <p>Why conventional systems fail to identify the best talent:</p>
+            <div class="grid" style="margin-top: 2rem;">
+                <div class="card">
+                    <p class="highlight">Keyword Reliance</p>
+                    <p style="font-size: 1rem;">They over-rely on exact word matches, missing highly capable adjacent talent.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Hidden Gems Lost</p>
+                    <p style="font-size: 1rem;">Context is ignored, meaning candidates with strong potential but poor formatting are dropped.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Overfit Dominance</p>
+                    <p style="font-size: 1rem;">They rank keyword-stuffed resumes too high, rewarding "gamers" over actual performers.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Black Box</p>
+                    <p style="font-size: 1rem;">They do not explain ranking decisions or integrate external activity signals.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>2</span></div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+        <div class="content">
+            <h2>The Solution: RANKFORGE AI</h2>
+            <div class="grid">
+                <ul>
+                    <li>Deep job understanding engine</li>
+                    <li>Candidate DNA engine</li>
+                    <li>Semantic fit engine</li>
+                    <li>Multi-signal ranking engine</li>
+                    <li>Hidden Gem Detector</li>
+                </ul>
+                <ul>
+                    <li>Overfit Detector</li>
+                    <li>Explainable ranking</li>
+                    <li>Fairness firewall</li>
+                    <li>Hiring manager brief generator</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>3</span></div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide">
+        <div class="content">
+            <h2>System Architecture</h2>
+            <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid #334155; padding: 2rem; border-radius: 12px; margin-top: 2rem;">
+                <ol style="color: #cbd5e1; font-size: 1.5rem; line-height: 2;">
+                    <li><strong>Input Layer:</strong> Job Description Input & Candidate Dataset</li>
+                    <li><strong>Extraction Layer:</strong> Job DNA & Skill Ontology / Semantic Matching</li>
+                    <li><strong>Intelligence Layer:</strong> Signal Integration & Ranking Engine</li>
+                    <li><strong>Governance Layer:</strong> Explainability & Fairness Guardrail</li>
+                    <li><strong>Output Layer:</strong> Ranked Output Generator & PDF Export</li>
+                </ol>
+            </div>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>4</span></div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide">
+        <div class="content">
+            <h2>Ranking Methodology</h2>
+            <p>Our scoring dimensions evaluate the complete candidate:</p>
+            <div class="grid" style="font-size: 1.25rem;">
+                <ul>
+                    <li>Mandatory skill match</li>
+                    <li>Semantic skill adjacency</li>
+                    <li>Domain relevance</li>
+                    <li>Experience depth</li>
+                    <li>Project evidence</li>
+                </ul>
+                <ul>
+                    <li>Career trajectory</li>
+                    <li>Activity signals</li>
+                    <li>Availability fit</li>
+                    <li>Risk adjustment</li>
+                    <li>Evidence confidence</li>
+                </ul>
+            </div>
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(99, 102, 241, 0.1); border-left: 4px solid #6366f1;">
+                <p style="font-size: 1.25rem; font-style: italic; margin: 0;">"The system does not produce a black-box score. Each candidate rank is supported by evidence, confidence, risk indicators, and explanation."</p>
+            </div>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>5</span></div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="slide">
+        <div class="content">
+            <h2>Key Differentiators</h2>
+            <div class="grid">
+                <div class="card">
+                    <p class="highlight">Hidden Gem Detector</p>
+                    <p style="font-size: 1.1rem;">Finds high-trajectory talent missing exact keywords.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Overfit Detector</p>
+                    <p style="font-size: 1.1rem;">Flags candidates with perfect keyword matches but low project evidence.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Evidence Graph</p>
+                    <p style="font-size: 1.1rem;">Maps claims directly to past projects and activity signals.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Fairness Firewall</p>
+                    <p style="font-size: 1.1rem;">Actively strips out bias-inducing attributes prior to scoring.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>6</span></div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="slide">
+        <div class="content">
+            <h2>Responsible AI & Governance</h2>
+            <ul style="line-height: 2;">
+                <li><span class="highlight">AI does not make final hiring decisions.</span> It is decision-support.</li>
+                <li>Protected attributes are excluded completely from the model context.</li>
+                <li>Ranking is based only on job-relevant evidence.</li>
+                <li>Human review is mandatory before final action.</li>
+                <li>Scoring is explainable via natural language.</li>
+                <li>Audit trail is maintained for compliance.</li>
+                <li>Fairness warnings are shown to recruiters.</li>
+            </ul>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>7</span></div>
+    </div>
+
+    <!-- Slide 8 -->
+    <div class="slide">
+        <div class="content">
+            <h2>Demo Flow</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
+                <div style="display: flex; gap: 1rem; align-items: center;"><span style="background: #10b981; color: #020617; font-weight: bold; padding: 0.5rem 1rem; border-radius: 8px;">1</span> <p style="margin: 0;">Recruiter enters job description & system generates Job DNA.</p></div>
+                <div style="display: flex; gap: 1rem; align-items: center;"><span style="background: #10b981; color: #020617; font-weight: bold; padding: 0.5rem 1rem; border-radius: 8px;">2</span> <p style="margin: 0;">System ranks candidates.</p></div>
+                <div style="display: flex; gap: 1rem; align-items: center;"><span style="background: #10b981; color: #020617; font-weight: bold; padding: 0.5rem 1rem; border-radius: 8px;">3</span> <p style="margin: 0;">User opens "Why this rank?" panel.</p></div>
+                <div style="display: flex; gap: 1rem; align-items: center;"><span style="background: #10b981; color: #020617; font-weight: bold; padding: 0.5rem 1rem; border-radius: 8px;">4</span> <p style="margin: 0;">User reviews Hidden Gem & Overfit Detectors.</p></div>
+                <div style="display: flex; gap: 1rem; align-items: center;"><span style="background: #10b981; color: #020617; font-weight: bold; padding: 0.5rem 1rem; border-radius: 8px;">5</span> <p style="margin: 0;">User exports ranked output and hiring brief.</p></div>
+            </div>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>8</span></div>
+    </div>
+
+    <!-- Slide 9 -->
+    <div class="slide">
+        <div class="content">
+            <h2>System Output</h2>
+            <p>What the system produces for the hiring manager:</p>
+            <div class="grid" style="font-size: 1.25rem;">
+                <ul>
+                    <li>Ranked candidate shortlist</li>
+                    <li>Fit score & Evidence score</li>
+                    <li>Risk score & Confidence score</li>
+                    <li>Key strengths</li>
+                    <li>Key concerns</li>
+                </ul>
+                <ul>
+                    <li>Recommended next action</li>
+                    <li>Custom Interview questions</li>
+                    <li>PDF export (Audit Ready)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>9</span></div>
+    </div>
+
+    <!-- Slide 10 -->
+    <div class="slide">
+        <div class="content">
+            <h2>Future Roadmap</h2>
+            <div class="grid" style="margin-top: 2rem;">
+                <div class="card">
+                    <p class="highlight">Integration</p>
+                    <p style="font-size: 1.1rem;">ATS integrations (Workday, Greenhouse) and robust resume parser.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Intelligence</p>
+                    <p style="font-size: 1.1rem;">LLM-powered semantic matching and skill ontology expansion.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Optimization</p>
+                    <p style="font-size: 1.1rem;">Interview feedback loop and internal mobility recommendations.</p>
+                </div>
+                <div class="card">
+                    <p class="highlight">Compliance</p>
+                    <p style="font-size: 1.1rem;">Bias monitoring dashboard and workforce planning intelligence.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer"><span>RANKFORGE AI</span><span>10</span></div>
+    </div>
+
+</body>
+</html>

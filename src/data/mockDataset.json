@@ -1,0 +1,102 @@
+[
+  {
+    "id": "c1",
+    "name": "Alex Mercer",
+    "currentRole": "Lead GRC Consultant",
+    "totalExperienceYears": 8,
+    "location": "New York, NY",
+    "skills": ["SOC 2", "ISO 27001", "Vendor Risk Management", "Audit Report Writing", "Stakeholder Management", "BFSI", "NIST CSF"],
+    "activitySignals": "Active contributor to GRC open source frameworks, recently published an article on SOC 2 compliance for fintechs.",
+    "projects": ["Led SOC 2 Type II audit for a major payment processor", "Implemented ISO 27001 ISMS for a regional bank"]
+  },
+  {
+    "id": "c2",
+    "name": "Jamie Lin",
+    "currentRole": "Information Security Analyst",
+    "totalExperienceYears": 4,
+    "location": "Austin, TX",
+    "skills": ["Control Testing", "ISO 27001", "Risk Assessments", "Client Communication", "PCI-DSS"],
+    "activitySignals": "Transitioning from a pure technical pentesting role to GRC. High trajectory, very fast learner.",
+    "projects": ["Conducted 50+ vendor risk assessments last quarter", "Automated control testing using Python scripts"]
+  },
+  {
+    "id": "c3",
+    "name": "Samir Patel",
+    "currentRole": "IT Auditor",
+    "totalExperienceYears": 12,
+    "location": "Chicago, IL",
+    "skills": ["Audit Report Writing", "SOX Compliance", "COBIT", "Vendor Risk", "Stakeholder Management"],
+    "activitySignals": "Stable tenure. Not much recent upskilling seen in BFSI specifically, but very strong audit fundamentals.",
+    "projects": ["Managed annual SOX ITGC audits", "Developed third-party risk management lifecycle"]
+  },
+  {
+    "id": "c4",
+    "name": "Taylor Swift",
+    "currentRole": "Cybersecurity Risk Manager",
+    "totalExperienceYears": 9,
+    "location": "San Francisco, CA",
+    "skills": ["SOC 2", "ISO 27001", "Vendor Risk", "BFSI", "Control Testing", "Client Communication", "Audit Report Writing", "Stakeholder Management"],
+    "activitySignals": "Keyword matched perfectly. However, resume seems heavily tailored (overfit). Previous roles were primarily in basic IT support until recently.",
+    "projects": ["Assisted with vendor risk", "Helped with SOC 2"]
+  },
+  {
+    "id": "c5",
+    "name": "Jordan Lee",
+    "currentRole": "Compliance Specialist",
+    "totalExperienceYears": 6,
+    "location": "Remote",
+    "skills": ["Healthcare Compliance", "HIPAA", "HITRUST", "Client Communication"],
+    "activitySignals": "Looking to pivot into BFSI. Strong communication skills, but lacks financial sector context.",
+    "projects": ["Led HIPAA gap assessment for hospital network"]
+  },
+  {
+    "id": "c6",
+    "name": "Casey Smith",
+    "currentRole": "Senior GRC Analyst",
+    "totalExperienceYears": 7,
+    "location": "Boston, MA",
+    "skills": ["SOC 2", "Vendor Risk", "BFSI", "Control Testing", "Client Communication", "Stakeholder Management"],
+    "activitySignals": "Consistently promoted within a leading financial institution. Strong internal mobility signals.",
+    "projects": ["Managed third-party vendor risk program for a top 10 bank", "Streamlined SOC 2 evidence collection"]
+  },
+  {
+    "id": "c7",
+    "name": "Morgan Davies",
+    "currentRole": "Risk & Compliance Analyst",
+    "totalExperienceYears": 5,
+    "location": "Seattle, WA",
+    "skills": ["ISO 27001", "NIST 800-53", "Audit Report Writing", "Control Testing"],
+    "activitySignals": "Recent certifications in Cloud Security. No direct BFSI, mostly tech sector.",
+    "projects": ["Drafted ISO 27001 Statement of Applicability for a SaaS startup"]
+  },
+  {
+    "id": "c8",
+    "name": "Riley Kim",
+    "currentRole": "Internal Auditor",
+    "totalExperienceYears": 10,
+    "location": "Denver, CO",
+    "skills": ["Audit Report Writing", "Stakeholder Management", "BFSI", "Control Testing", "Client Communication"],
+    "activitySignals": "Extensive experience in traditional bank audits, currently upskilling in modern cloud compliance frameworks (SOC 2).",
+    "projects": ["Authored comprehensive audit reports for the Board of Directors", "Tested financial and IT controls across 20 branches"]
+  },
+  {
+    "id": "c9",
+    "name": "Drew Carter",
+    "currentRole": "Security Consultant",
+    "totalExperienceYears": 3,
+    "location": "Atlanta, GA",
+    "skills": ["SOC 2", "ISO 27001", "Vendor Risk", "Control Testing", "Client Communication"],
+    "activitySignals": "Fast-tracked at a Big 4 consulting firm. Very high exposure to diverse clients, including some fintech. Strong trajectory.",
+    "projects": ["Performed SOC 2 readiness assessments for 5 startups", "Tested ISO 27001 controls for a regional credit union"]
+  },
+  {
+    "id": "c10",
+    "name": "Avery Johnson",
+    "currentRole": "Director of Compliance",
+    "totalExperienceYears": 15,
+    "location": "Miami, FL",
+    "skills": ["SOC 2", "ISO 27001", "Vendor Risk", "BFSI", "Client Communication", "Audit Report Writing", "Stakeholder Management"],
+    "activitySignals": "Overqualified for a Senior Analyst role. Currently managing a team of 20. Likely a flight risk or salary mismatch.",
+    "projects": ["Built global GRC program from scratch", "Managed a $5M compliance budget"]
+  }
+]
