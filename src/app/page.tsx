@@ -5,30 +5,6 @@ import { Download, FileText, AlertTriangle, Briefcase, Eye, Loader2, Play, Info 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-const Tooltip = ({ children, content }: { children: React.ReactNode, content: string }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  return (
-    <div 
-      className="relative inline-flex items-center gap-1.5 cursor-help group normal-case tracking-normal"
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-    >
-      {children}
-      <Info size={14} className="text-slate-400 group-hover:text-indigo-600 transition-colors duration-300" />
-      
-      {isVisible && (
-        <div className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-64 p-4 rounded-2xl bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.4)] text-sm text-slate-100 z-[100] origin-top animate-fade-in-up text-left font-normal tracking-normal leading-relaxed normal-case shadow-2xl">
-          {content}
-          {/* Sleek SVG Arrow pointing up */}
-          <svg className="absolute bottom-full left-1/2 -translate-x-1/2 mb-[-1px] w-4 h-2 text-slate-900/95 drop-shadow-sm" viewBox="0 0 16 8" fill="currentColor">
-            <path d="M8 0L16 8H0L8 0Z" />
-          </svg>
-        </div>
-      )}
-    </div>
-  );
-};
-
 export default function Home() {
   const [candidates, setCandidates] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -198,23 +174,23 @@ export default function Home() {
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-slate-50/50 text-slate-600 border-b border-slate-200/60">
                 <tr>
-                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs">
-                    <Tooltip content="The candidate's absolute ranking from 1 to N based on the AI's holistic analysis.">Rank</Tooltip>
+                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs cursor-help" title="The candidate's absolute ranking from 1 to N based on the AI's holistic analysis.">
+                    <div className="flex items-center gap-1.5">Rank <Info size={14} className="text-slate-400" /></div>
                   </th>
-                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs">
-                    <Tooltip content="Candidate profile including name, current role, and total years of experience.">Candidate</Tooltip>
+                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs cursor-help" title="Candidate profile including name, current role, and total years of experience.">
+                    <div className="flex items-center gap-1.5">Candidate <Info size={14} className="text-slate-400" /></div>
                   </th>
-                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs">
-                    <Tooltip content="Overall match percentage factoring in skills, experience, and trajectory vs the job description.">Overall Fit</Tooltip>
+                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs cursor-help" title="Overall match percentage factoring in skills, experience, and trajectory vs the job description.">
+                    <div className="flex items-center gap-1.5">Overall Fit <Info size={14} className="text-slate-400" /></div>
                   </th>
-                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs">
-                    <Tooltip content="Score based strictly on verifiable project outcomes and past achievements.">Evidence Score</Tooltip>
+                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs cursor-help" title="Score based strictly on verifiable project outcomes and past achievements.">
+                    <div className="flex items-center gap-1.5">Evidence Score <Info size={14} className="text-slate-400" /></div>
                   </th>
-                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs">
-                    <Tooltip content="AI prediction of flight risk, keyword stuffing (overfit), or culture mismatch. Lower is better.">Risk Score</Tooltip>
+                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs cursor-help" title="AI prediction of flight risk, keyword stuffing (overfit), or culture mismatch. Lower is better.">
+                    <div className="flex items-center gap-1.5">Risk Score <Info size={14} className="text-slate-400" /></div>
                   </th>
-                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs">
-                    <Tooltip content="The AI's recommended next step (e.g. Interview, Hold, Reject) and justification.">Action</Tooltip>
+                  <th className="px-8 py-5 font-bold uppercase tracking-wider text-xs cursor-help" title="The AI's recommended next step (e.g. Interview, Hold, Reject) and justification.">
+                    <div className="flex items-center gap-1.5">Action <Info size={14} className="text-slate-400" /></div>
                   </th>
                 </tr>
               </thead>
@@ -295,12 +271,13 @@ export default function Home() {
                       </span>
                     </td>
                     <td className="px-8 py-5">
-                      <Tooltip content={candidate.keyEvidence}>
-                        <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider bg-white hover:bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md px-5 py-2.5 rounded-xl transition-all duration-300 text-slate-700 hover:-translate-y-1">
-                          <FileText size={16} className="text-indigo-500" />
-                          View Proof
-                        </button>
-                      </Tooltip>
+                      <button 
+                        title={candidate.keyEvidence}
+                        className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider bg-white hover:bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md px-5 py-2.5 rounded-xl transition-all duration-300 text-slate-700 hover:-translate-y-1 cursor-help"
+                      >
+                        <FileText size={16} className="text-indigo-500" />
+                        View Proof
+                      </button>
                     </td>
                   </tr>
                 ))}
