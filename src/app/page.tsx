@@ -16,10 +16,11 @@ const Tooltip = ({ children, content }: { children: React.ReactNode, content: st
       {children}
       <Info size={14} className="text-slate-400 group-hover:text-indigo-500 transition-colors" />
       {isVisible && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 rounded-xl bg-white/90 backdrop-blur-xl border border-white shadow-2xl text-xs text-slate-800 z-50 animate-fade-in-up text-center font-medium tracking-wide">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 p-3 rounded-xl bg-white/95 backdrop-blur-2xl border border-slate-200 shadow-2xl text-xs text-slate-800 z-[100] animate-fade-in-up text-center font-medium tracking-wide">
           {content}
-          {/* Arrow */}
-          <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-4 border-transparent border-t-white"></div>
+          {/* Arrow pointing up */}
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 -mb-[1px] border-4 border-transparent border-b-slate-200"></div>
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 -mb-[2px] border-4 border-transparent border-b-white"></div>
         </div>
       )}
     </div>
