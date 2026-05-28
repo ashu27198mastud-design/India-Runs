@@ -12,16 +12,25 @@ export default function Home() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/rank');
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 60000);
+
+      const res = await fetch('/api/rank', { signal: controller.signal });
+      clearTimeout(timeout);
+
       const json = await res.json();
       
       if (!res.ok || !json.success) {
-        throw new Error(json.error || 'Failed to fetch rankings');
+        throw new Error(json.error || `API error ${res.status}`);
       }
       
       setCandidates(json.data);
     } catch (err: any) {
-      setError(err.message);
+      if (err.name === 'AbortError') {
+        setError('Request timed out. The AI is taking longer than expected. Please try again.');
+      } else {
+        setError(err.message);
+      }
     } finally {
       setIsLoading(false);
     }

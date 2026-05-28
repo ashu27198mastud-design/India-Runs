@@ -60,15 +60,15 @@ export async function rankCandidates(): Promise<RankedCandidate[]> {
   ${JOB_DESCRIPTION}
   
   Candidates JSON:
-  ${JSON.stringify(candidates, null, 2)}
+  ${JSON.stringify(candidates.slice(0, 15), null, 2)}
   
-  Rank them from 1 (best) to 10 (worst) and provide scores and explanations for each.
+  Rank ALL of them from 1 (best) to N (worst) and provide scores and explanations for each.
   Strictly follow the JSON schema provided.
   `;
 
   try {
     const response = await client.models.generateContent({
-      model: 'gemini-2.5-pro',
+      model: 'gemini-2.0-flash',
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -84,7 +84,6 @@ export async function rankCandidates(): Promise<RankedCandidate[]> {
     return [];
   } catch (error) {
     console.error("Error generating ranking via Gemini:", error);
-    // Fallback to empty or dummy if API fails
-    return [];
+    throw error; // Propagate so the API route returns a proper error to the frontend
   }
 }
