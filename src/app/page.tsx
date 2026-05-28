@@ -9,18 +9,20 @@ const Tooltip = ({ children, content }: { children: React.ReactNode, content: st
   const [isVisible, setIsVisible] = useState(false);
   return (
     <div 
-      className="relative flex items-center gap-1 cursor-help group"
+      className="relative inline-flex items-center gap-1.5 cursor-help group"
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
     >
       {children}
-      <Info size={14} className="text-slate-400 group-hover:text-indigo-500 transition-colors" />
+      <Info size={14} className="text-slate-400 group-hover:text-indigo-600 transition-colors duration-300" />
+      
       {isVisible && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 p-3 rounded-xl bg-white/95 backdrop-blur-2xl border border-slate-200 shadow-2xl text-xs text-slate-800 z-[100] animate-fade-in-up text-center font-medium tracking-wide">
+        <div className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-56 p-3.5 rounded-2xl bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] text-xs text-white z-[100] origin-top animate-fade-in-up text-center font-medium tracking-wide leading-relaxed">
           {content}
-          {/* Arrow pointing up */}
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 -mb-[1px] border-4 border-transparent border-b-slate-200"></div>
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 -mb-[2px] border-4 border-transparent border-b-white"></div>
+          {/* Sleek SVG Arrow pointing up */}
+          <svg className="absolute bottom-full left-1/2 -translate-x-1/2 mb-[-1px] w-4 h-2 text-slate-900/95 drop-shadow-sm" viewBox="0 0 16 8" fill="currentColor">
+            <path d="M8 0L16 8H0L8 0Z" />
+          </svg>
         </div>
       )}
     </div>
