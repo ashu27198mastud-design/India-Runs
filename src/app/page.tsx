@@ -15,7 +15,7 @@ export default function Home() {
     setError(null);
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 60000);
+      const timeout = setTimeout(() => controller.abort(), 120000); // 120 seconds
 
       const res = await fetch('/api/rank', { signal: controller.signal });
       clearTimeout(timeout);
