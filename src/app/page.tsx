@@ -242,7 +242,7 @@ export default function Home() {
       doc.setTextColor(100,100,100); doc.setFontSize(8);
       doc.text(`RankForge AI Executive Report | Page ${pageNum} of 6`, 105, 290, { align: 'center' });
       doc.setFontSize(7);
-      doc.text("Responsible AI: Rankings are for decision-support only. Final hiring decisions must be made by qualified human reviewers.", 105, 294, { align: 'center' });
+      doc.text("This report was generated from the RankForge AI scoring engine using synthetic candidate data and configurable ranking weights.", 105, 294, { align: 'center' });
     };
 
     // ================= PAGE 1: EXECUTIVE SUMMARY =================
@@ -356,15 +356,36 @@ export default function Home() {
 
     // Archetypes
     doc.setTextColor(255, 255, 255); doc.setFontSize(12); doc.setFont(undefined!, 'bold');
-    doc.text("Candidate Archetypes", 20, 110);
+    doc.text("Candidate Archetypes", 20, 100);
     doc.setTextColor(200, 200, 200); doc.setFontSize(9); doc.setFont(undefined!, 'normal');
-    doc.text("HIDDEN GEM: Strong evidence of capability, weak keyword match.", 25, 120);
-    doc.text("RESUME INFLATED: High keyword match, lacks execution evidence.", 25, 127);
-    doc.text("STRONG EVIDENCE: Both high keyword match and high evidence.", 25, 134);
+    doc.text("HIDDEN GEM: Strong evidence of capability, weak keyword match.", 25, 108);
+    doc.text("RESUME INFLATED: High keyword match, lacks execution evidence.", 25, 115);
+    doc.text("STRONG EVIDENCE: Both high keyword match and high evidence.", 25, 122);
+
+    // Top 3 Score Breakdown
+    doc.setTextColor(255, 255, 255); doc.setFontSize(12); doc.setFont(undefined!, 'bold');
+    doc.text("Top 3 Candidates: Score Breakdown", 20, 135);
+    autoTable(doc, {
+      head: [["Candidate", "Claim", "Evidence", "Context", "Trajectory", "Risk Adj.", "Final"]],
+      body: candidates.slice(0, 3).map(c => [
+        c.candidateName,
+        c.claimMatchScore,
+        c.evidenceStrength,
+        c.contextFit,
+        c.trajectoryScore,
+        `-${c.riskGapScore}`,
+        `${c.proofOfSuccessScore}%`
+      ]),
+      startY: 142,
+      theme: 'grid',
+      styles: { fontSize: 8, textColor: [200,200,200], fillColor: [15,17,22], cellPadding: 2 },
+      headStyles: { fillColor: [99, 102, 241], textColor: [255,255,255], fontStyle: 'bold' }
+    });
 
     // Human Review Matrix
+    const finalY4 = (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
     doc.setTextColor(255, 255, 255); doc.setFontSize(12); doc.setFont(undefined!, 'bold');
-    doc.text("Human Review Decision Matrix", 20, 155);
+    doc.text("Human Review Decision Matrix", 20, finalY4);
     autoTable(doc, {
       head: [["Candidate Type", "AI Recommendation", "Human Reviewer Action"]],
       body: [
@@ -373,7 +394,7 @@ export default function Home() {
         ["Resume Inflated", "Hold / Reject", "Test claims through scenario questions"],
         ["Standard", "Backup", "Compare against shortlist strength"]
       ],
-      startY: 165,
+      startY: finalY4 + 8,
       theme: 'grid',
       styles: { fontSize: 9, textColor: [200,200,200], fillColor: [15,17,22] },
       headStyles: { fillColor: [99, 102, 241], textColor: [255,255,255], fontStyle: 'bold' }
@@ -428,6 +449,21 @@ export default function Home() {
       doc.text("Human Validation Question:", 25, currentY6 + 42);
       doc.setTextColor(180, 180, 180); doc.setFontSize(9); doc.setFont(undefined!, 'italic');
       doc.text(`"${c.proofValidationQuestions[0] || 'Walk us through your end-to-end process.'}"`, 25, currentY6 + 50, { maxWidth: 160 });
+
+      // If this is the Hidden Gem, inject the evidence graph
+      if (title === "HIDDEN GEM") {
+        doc.setFillColor(30, 32, 40); doc.rect(25, currentY6 + 60, 160, 35, 'F');
+        doc.setTextColor(99, 102, 241); doc.setFontSize(8); doc.setFont(undefined!, 'bold');
+        doc.text("RankForge Evidence Graph", 30, currentY6 + 66);
+        doc.setTextColor(200, 200, 200); doc.setFontSize(8); doc.setFont(undefined!, 'normal');
+        doc.text("Target Role Req         --mapped-to-->   Candidate Evidence", 30, currentY6 + 73);
+        doc.text("Vendor Risk Mgt         --------------->   Executed vendor program at Top 10 Bank", 30, currentY6 + 79);
+        doc.text("SOC 2 Capability        --------------->   Built evidence collection workflow", 30, currentY6 + 85);
+        doc.setTextColor(16, 185, 129); doc.setFont(undefined!, 'bold');
+        doc.text("Verdict: High probability of success despite low keyword density.", 30, currentY6 + 91);
+        currentY6 += 45; // extra space for graph
+      }
+      
       currentY6 += 75;
     };
 
