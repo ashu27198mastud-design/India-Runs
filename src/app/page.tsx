@@ -221,8 +221,9 @@ export default function Home() {
       if (!res.ok || !json.success) throw new Error(json.error || `API error ${res.status}`);
       setCandidates(json.data);
       setBlueprint(json.blueprint);
-    } catch (err: any) {
-      setError(err.name === 'AbortError' ? 'Request timed out. Please try again.' : err.message);
+    } catch (err: unknown) {
+      const e = err instanceof Error ? err : new Error(String(err));
+      setError(e.name === 'AbortError' ? 'Request timed out. Please try again.' : e.message);
     } finally {
       setIsLoading(false);
     }
@@ -273,7 +274,7 @@ export default function Home() {
     });
 
     // Disclaimer
-    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    const finalY = (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
     doc.setTextColor(100,100,100); doc.setFontSize(7);
     doc.text("Responsible AI: Rankings are for decision-support only. Final hiring decisions must be made by qualified human reviewers.", 14, finalY);
     doc.text("Rankings exclude protected attributes. All scoring is based on professional qualifications and work evidence only.", 14, finalY + 4);

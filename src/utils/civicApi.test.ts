@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, MockedFunction } from 'vitest';
 import { getCivicInformation, AddressInputSchema } from './civicApi';
 
-// Mock fetch globally
-global.fetch = vi.fn();
+// Mock fetch globally with proper typing — NIST PR.PS-03: no any types
+global.fetch = vi.fn() as MockedFunction<typeof fetch>;
+const mockedFetch = global.fetch as MockedFunction<typeof fetch>;
 
 describe('Civic API Utility', () => {
   beforeEach(() => {
@@ -29,11 +30,11 @@ describe('Civic API Utility', () => {
     });
 
     it('should return graceful fallback on 404', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
+      mockedFetch.mockResolvedValueOnce({
         ok: false,
         status: 404,
-        json: async () => ({ error: { message: 'Not found' } })
-      });
+        json: async () => ({ error: { message: 'Not found' } }),
+      } as Response);
 
       const response = await getCivicInformation('Fake Address');
       expect(response.success).toBe(false);
@@ -41,11 +42,11 @@ describe('Civic API Utility', () => {
     });
 
     it('should return data successfully on 200 OK', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
+      mockedFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
-        json: async () => ({ kind: 'civicinfo#voterInfoResponse', state: [] })
-      });
+        json: async () => ({ kind: 'civicinfo#voterInfoResponse', state: [] }),
+      } as Response);
 
       const response = await getCivicInformation('123 Main St');
       expect(response.success).toBe(true);

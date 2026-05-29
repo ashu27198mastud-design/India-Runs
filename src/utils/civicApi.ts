@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { logger } from './logger';
 
 // Zod schema for input validation to prevent injection attacks
 export const AddressInputSchema = z.object({
@@ -48,7 +49,7 @@ export async function getCivicInformation(address: string, endpoint: 'voterInfoQ
       data,
     };
   } catch (error) {
-    console.error('Civic API Fetch Error:', error);
+    logger.error('civicApi', 'Fetch failed', { error: error instanceof Error ? error.message : String(error) });
     return {
       success: false,
       message: 'I cannot find verified data for that location at this time.',
