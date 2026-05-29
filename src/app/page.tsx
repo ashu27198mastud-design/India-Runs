@@ -302,7 +302,7 @@ export default function Home() {
       head: [["Candidate", "ATS Rank", "RankForge", "What ATS Saw", "What RankForge Found"]],
       body: [
         ["Aisha Patel", "#1", "#6", "Strong keyword match", "Weak evidence, high risk gap"],
-        ["David Chen", "#9", "#3", "Lower keyword match", "Strong vendor risk evidence, SOC 2"],
+        ["David Chen", "#9", "#3", "Lower keyword match", "Strong vendor risk evidence and SOC 2 evidence workflow"],
         ["Sarah Jenkins", "#2", "#1", "Strong keyword match", "Strong evidence and direct BFSI experience"],
         ["Marcus Thorne", "#3", "#7", "Senior GRC keywords", "Weak recent proof, inflated profile risk"]
       ],
@@ -332,25 +332,25 @@ export default function Home() {
       doc.text(doc.splitTextToSize(`• ${blueprint.coreCapabilities.join('\n• ')}`, 160), 25, 58);
 
       // Required Proof Card
-      doc.setFillColor(20, 22, 28); doc.rect(20, 85, 170, 45, 'F');
+      doc.setFillColor(20, 22, 28); doc.rect(20, 90, 170, 45, 'F');
       doc.setTextColor(255, 255, 255); doc.setFontSize(11); doc.setFont(undefined!, 'bold');
-      doc.text("Required Proof of Execution", 25, 95);
+      doc.text("Required Proof of Execution", 25, 100);
       doc.setTextColor(180, 180, 180); doc.setFontSize(9); doc.setFont(undefined!, 'normal');
-      doc.text(doc.splitTextToSize(`• ${blueprint.proofRequired.join('\n• ')}`, 160), 25, 103);
+      doc.text(doc.splitTextToSize(`• ${blueprint.proofRequired.join('\n• ')}`, 160), 25, 108);
 
       // Hidden Requirements
-      doc.setFillColor(20, 22, 28); doc.rect(20, 140, 170, 35, 'F');
+      doc.setFillColor(20, 22, 28); doc.rect(20, 150, 170, 35, 'F');
       doc.setTextColor(255, 255, 255); doc.setFontSize(11); doc.setFont(undefined!, 'bold');
-      doc.text("Hidden Requirements & Deal Breakers", 25, 150);
+      doc.text("Hidden Requirements & Deal Breakers", 25, 160);
       doc.setTextColor(180, 180, 180); doc.setFontSize(9); doc.setFont(undefined!, 'normal');
-      doc.text(doc.splitTextToSize(`• ${blueprint.hiddenRequirements.join('\n• ')}`, 160), 25, 158);
+      doc.text(doc.splitTextToSize(`• ${blueprint.hiddenRequirements.join('\n• ')}`, 160), 25, 168);
 
       // Failure Risk
-      doc.setFillColor(244, 63, 94, 0.1); doc.setDrawColor(244, 63, 94, 0.5); doc.rect(20, 185, 170, 30, 'FD');
+      doc.setFillColor(244, 63, 94, 0.1); doc.setDrawColor(244, 63, 94, 0.5); doc.rect(20, 200, 170, 30, 'FD');
       doc.setTextColor(244, 63, 94); doc.setFontSize(11); doc.setFont(undefined!, 'bold');
-      doc.text("Risk If Wrong Hire", 25, 195);
+      doc.text("Risk If Wrong Hire", 25, 210);
       doc.setTextColor(200, 200, 200); doc.setFontSize(9); doc.setFont(undefined!, 'normal');
-      doc.text(doc.splitTextToSize(blueprint.riskIfWrongHire, 160), 25, 203);
+      doc.text(doc.splitTextToSize(blueprint.riskIfWrongHire, 160), 25, 218);
     }
     addFooter(3);
 
@@ -448,7 +448,10 @@ export default function Home() {
     let currentY6 = 45;
 
     const renderDeepDive = (title: string, c: any, whyAts: string, whyRf: string) => {
-      doc.setFillColor(20, 22, 28); doc.rect(20, currentY6, 170, 75, 'F');
+      const isHiddenGem = title === "HIDDEN GEM";
+      const cardHeight = isHiddenGem ? 120 : 75;
+
+      doc.setFillColor(20, 22, 28); doc.rect(20, currentY6, 170, cardHeight, 'F');
       doc.setTextColor(16, 185, 129); doc.setFontSize(12); doc.setFont(undefined!, 'bold');
       doc.text(`#${c.rank} - ${c.candidateName} — ${title}`, 25, currentY6 + 10);
       
@@ -462,8 +465,8 @@ export default function Home() {
       doc.text(`"${c.proofValidationQuestions[0]}"`, 25, currentY6 + 56, { maxWidth: 160 });
 
       // Evidence Graph for David Chen
-      if (title === "HIDDEN GEM") {
-        doc.setFillColor(30, 32, 40); doc.rect(25, currentY6 + 68, 160, 40, 'F');
+      if (isHiddenGem) {
+        doc.setFillColor(30, 32, 40); doc.rect(25, currentY6 + 68, 160, 45, 'F');
         doc.setTextColor(99, 102, 241); doc.setFontSize(9); doc.setFont(undefined!, 'bold');
         doc.text("RankForge Evidence Graph", 30, currentY6 + 76);
         doc.setTextColor(200, 200, 200); doc.setFontSize(8); doc.setFont(undefined!, 'normal');
@@ -472,34 +475,9 @@ export default function Home() {
         doc.text("SOC 2 Capability        --------------->   Built evidence collection workflow", 30, currentY6 + 100);
         doc.setTextColor(16, 185, 129); doc.setFont(undefined!, 'bold');
         doc.text("Verdict: High probability of success despite low keyword density.", 30, currentY6 + 108);
-        currentY6 += 45; // Expand card size for the graph
-        
-        // Expand the background rect for the graph
-        doc.setFillColor(20, 22, 28); doc.rect(20, currentY6 - 45, 170, 120, 'F');
-        
-        // Redraw content that was covered (a quick hack to fix the expanded rect)
-        doc.setTextColor(16, 185, 129); doc.setFontSize(12); doc.setFont(undefined!, 'bold');
-        doc.text(`#${c.rank} - ${c.candidateName} — ${title}`, 25, currentY6 - 45 + 10);
-        doc.setTextColor(200, 200, 200); doc.setFontSize(9); doc.setFont(undefined!, 'normal');
-        doc.text(`Why ATS ranked them here: ${whyAts}`, 25, currentY6 - 45 + 22);
-        doc.text(`Why RankForge ranked them here: ${whyRf}`, 25, currentY6 - 45 + 32, { maxWidth: 160 });
-        doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont(undefined!, 'bold');
-        doc.text("Human Validation Question:", 25, currentY6 - 45 + 48);
-        doc.setTextColor(180, 180, 180); doc.setFontSize(9); doc.setFont(undefined!, 'italic');
-        doc.text(`"${c.proofValidationQuestions[0]}"`, 25, currentY6 - 45 + 56, { maxWidth: 160 });
-        
-        doc.setFillColor(30, 32, 40); doc.rect(25, currentY6 - 45 + 68, 160, 45, 'F');
-        doc.setTextColor(99, 102, 241); doc.setFontSize(9); doc.setFont(undefined!, 'bold');
-        doc.text("RankForge Evidence Graph", 30, currentY6 - 45 + 76);
-        doc.setTextColor(200, 200, 200); doc.setFontSize(8); doc.setFont(undefined!, 'normal');
-        doc.text("Target Role Req         --mapped-to-->   Candidate Evidence", 30, currentY6 - 45 + 84);
-        doc.text("Vendor Risk Mgt         --------------->   Executed vendor program at Top 10 Bank", 30, currentY6 - 45 + 92);
-        doc.text("SOC 2 Capability        --------------->   Built evidence collection workflow", 30, currentY6 - 45 + 100);
-        doc.setTextColor(16, 185, 129); doc.setFont(undefined!, 'bold');
-        doc.text("Verdict: High probability of success despite low keyword density.", 30, currentY6 - 45 + 108);
       }
       
-      currentY6 += 85;
+      currentY6 += cardHeight + 10;
     };
 
     renderDeepDive("STRONG EVIDENCE", dossierCandidates[0], "High keyword density across JD parameters.", "Exceptional proof backing all claims in real-world scenarios.");
