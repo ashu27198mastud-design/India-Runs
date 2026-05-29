@@ -1,16 +1,25 @@
 import { NextResponse } from 'next/server';
-import { rankCandidates } from '@/engine/ranking';
+import { rankCandidates, generateRoleBlueprint } from '@/engine/ranking';
 
-export const maxDuration = 60; // Allow up to 60 seconds for AI processing
+export const maxDuration = 300; // 5 minutes max for Cloud Run
 
 export async function GET() {
   try {
-    const rankedCandidates = await rankCandidates();
-    return NextResponse.json({ success: true, data: rankedCandidates });
+    // Run blueprint and ranking in parallel for speed
+    const [blueprint, rankedCandidates] = await Promise.all([
+      generateRoleBlueprint(),
+      rankCandidates()
+    ]);
+
+    return NextResponse.json({ 
+      success: true, 
+      data: rankedCandidates,
+      blueprint: blueprint
+    });
   } catch (error: any) {
-    console.error('Error in ranking API:', error?.message);
+    console.error('[API/rank] Error:', error);
     return NextResponse.json(
-      { success: false, error: error.message || 'Failed to rank candidates' },
+      { success: false, error: error?.message || 'Internal server error' },
       { status: 500 }
     );
   }
