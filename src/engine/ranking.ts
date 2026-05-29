@@ -37,6 +37,7 @@ export interface RankedCandidate {
   keyConcernGap: string;
   proofValidationQuestions: string[];
   recommendedAction: string;
+  oneLineExplanation: string;
   atsRank?: number;
 }
 
@@ -77,13 +78,14 @@ const RANKING_SCHEMA = {
       keyConcernGap: { type: 'STRING', description: 'Single most important gap or risk.' },
       proofValidationQuestions: { type: 'ARRAY', items: { type: 'STRING' }, description: '2-3 interview questions.' },
       recommendedAction: { type: 'STRING', description: 'Fast-Track Interview | Interview with Validation | Hold for Review | Reject' },
+      oneLineExplanation: { type: 'STRING', description: "Punchy one-sentence executive summary explaining this candidate's fit and risk." },
       atsRank: { type: 'INTEGER', description: 'Where a keyword-only ATS would rank this candidate.' },
     },
     required: ['rank', 'candidateName', 'currentRole', 'totalExperienceYears', 'location',
       'proofOfSuccessScore', 'claimMatchScore', 'evidenceStrength', 'contextFit',
       'trajectoryScore', 'riskGapScore', 'confidenceLevel', 'candidateType',
       'keyMatchingSkills', 'evidenceTrail', 'keyConcernGap', 'proofValidationQuestions',
-      'recommendedAction', 'atsRank'],
+      'recommendedAction', 'oneLineExplanation', 'atsRank'],
   },
 } as any as Schema;
 
@@ -154,7 +156,7 @@ What does the hiring manager assume but did NOT write?`;
 }
 
 export async function rankCandidates(): Promise<RankedCandidate[]> {
-  const candidatesToRank = candidates.slice(0, 8);
+  const candidatesToRank = candidates.slice(0, 10);
 
   const prompt = `You are the Proof-of-Success Ranking Engine of RankForge AI.
 

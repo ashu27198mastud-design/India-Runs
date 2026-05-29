@@ -232,54 +232,130 @@ export default function Home() {
   const exportToPDF = () => {
     if (candidates.length === 0) { alert("Run Intelligence first."); return; }
     const doc = new jsPDF();
+    
+    const setDarkBg = () => {
+      doc.setFillColor(10, 11, 15);
+      doc.rect(0, 0, 210, 297, 'F');
+    };
 
-    // Header
-    doc.setFillColor(10, 11, 15);
-    doc.rect(0, 0, 210, 297, 'F');
-    doc.setTextColor(16, 185, 129);
-    doc.setFontSize(20); doc.setFont(undefined!, 'bold');
-    doc.text("RANKFORGE AI", 14, 20);
-    doc.setTextColor(200, 200, 200);
-    doc.setFontSize(10); doc.setFont(undefined!, 'normal');
-    doc.text("Rank Evidence. Not Resumes.", 14, 27);
-    doc.text(`Evidence-Based Hiring Brief · Generated ${new Date().toLocaleDateString()}`, 14, 33);
-    doc.text("Role: Senior GRC Analyst", 14, 39);
+    const addFooter = (pageNum: number) => {
+      doc.setTextColor(100,100,100); doc.setFontSize(8);
+      doc.text(`RankForge AI Executive Report | Page ${pageNum}`, 105, 290, { align: 'center' });
+      doc.setFontSize(7);
+      doc.text("Responsible AI: Rankings are for decision-support only. Final hiring decisions must be made by qualified human reviewers.", 105, 294, { align: 'center' });
+    };
 
-    // Blueprint summary
+    // --- PAGE 1: Title & Executive Summary ---
+    setDarkBg();
+    doc.setTextColor(16, 185, 129); doc.setFontSize(26); doc.setFont(undefined!, 'bold');
+    doc.text("RANKFORGE AI", 105, 40, { align: 'center' });
+    doc.setTextColor(255, 255, 255); doc.setFontSize(16);
+    doc.text("Evidence-Based Talent Intelligence Report", 105, 52, { align: 'center' });
+    
+    doc.setTextColor(180, 180, 180); doc.setFontSize(10); doc.setFont(undefined!, 'normal');
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 105, 62, { align: 'center' });
+    doc.text("Role: Senior GRC Analyst", 105, 68, { align: 'center' });
+
+    doc.setTextColor(99, 102, 241); doc.setFontSize(14); doc.setFont(undefined!, 'bold');
+    doc.text("1. EXECUTIVE SUMMARY & REORDER STORY", 20, 90);
+    doc.setTextColor(200, 200, 200); doc.setFontSize(10); doc.setFont(undefined!, 'normal');
+    
+    const summaryText = `Traditional Applicant Tracking Systems (ATS) rank candidates based on keyword matching. This leads to "Resume Inflation" (candidates who stuff keywords but lack real-world proof) ranking at the top, while "Hidden Gems" (candidates with exceptional evidence but fewer exact keywords) are discarded.
+    
+RankForge AI evaluates EVIDENCE of role success. In this cohort of ${candidates.length} candidates, RankForge AI actively reordered the shortlist, surfacing high-potential talent that an ATS would have missed, and flagging high-risk candidates that an ATS would have falsely prioritized.`;
+    
+    const splitSummary = doc.splitTextToSize(summaryText, 170);
+    doc.text(splitSummary, 20, 100);
+
     if (blueprint) {
-      doc.setTextColor(99, 102, 241);
-      doc.setFontSize(9); doc.setFont(undefined!, 'bold');
-      doc.text("ROLE SUCCESS BLUEPRINT", 14, 50);
-      doc.setTextColor(180, 180, 180); doc.setFont(undefined!, 'normal');
-      doc.setFontSize(8);
-      doc.text(`Core: ${blueprint.coreCapabilities.slice(0,2).join(', ')}`, 14, 56);
-      doc.text(`Risk: ${blueprint.riskIfWrongHire.substring(0, 80)}...`, 14, 61);
+      doc.setTextColor(99, 102, 241); doc.setFontSize(12); doc.setFont(undefined!, 'bold');
+      doc.text("ROLE SUCCESS BLUEPRINT", 20, 140);
+      doc.setTextColor(180, 180, 180); doc.setFontSize(9); doc.setFont(undefined!, 'normal');
+      doc.text(`Core Capabilities: ${blueprint.coreCapabilities.join(', ')}`, 20, 148, { maxWidth: 170 });
+      doc.text(`Required Proof: ${blueprint.proofRequired.join(', ')}`, 20, 160, { maxWidth: 170 });
+      doc.text(`Risk if Wrong Hire: ${blueprint.riskIfWrongHire}`, 20, 172, { maxWidth: 170 });
     }
+    addFooter(1);
 
-    // Table
+    // --- PAGE 2: Scoring Methodology ---
+    doc.addPage(); setDarkBg();
+    doc.setTextColor(99, 102, 241); doc.setFontSize(14); doc.setFont(undefined!, 'bold');
+    doc.text("2. SCORING METHODOLOGY & ARCHETYPES", 20, 30);
+    
+    doc.setTextColor(255, 255, 255); doc.setFontSize(11); doc.setFont(undefined!, 'bold');
+    doc.text("The 5 Dimensions of Evidence:", 20, 45);
+    doc.setTextColor(200, 200, 200); doc.setFontSize(9); doc.setFont(undefined!, 'normal');
+    doc.text("• Proof of Success (0-100): Overall probability of succeeding in the role based on hard evidence.", 25, 53);
+    doc.text("• Claim Match (0-100): How closely the resume claims align with the job description (The ATS view).", 25, 60);
+    doc.text("• Evidence Strength (0-100): The depth of real-world proof backing up the candidate's claims.", 25, 67);
+    doc.text("• Context Fit (0-100): Alignment of past working environments with the target role.", 25, 74);
+    doc.text("• Risk Gap (0-100): The probability of hiring failure based on missing critical proof.", 25, 81);
+
+    doc.setTextColor(255, 255, 255); doc.setFontSize(11); doc.setFont(undefined!, 'bold');
+    doc.text("Candidate Archetypes:", 20, 95);
+    doc.setTextColor(200, 200, 200); doc.setFontSize(9); doc.setFont(undefined!, 'normal');
+    doc.text("💎 Hidden Gem: Strong evidence of capability, but weak keyword match. Highly recommended.", 25, 103);
+    doc.text("⚠️ Resume Inflated: High keyword match, but lacks evidence. High risk of failure.", 25, 110);
+    doc.text("🛡️ Strong Evidence: Both high keyword match and high evidence strength.", 25, 117);
+    addFooter(2);
+
+    // --- PAGE 3: The Top 10 Shortlist ---
+    doc.addPage(); setDarkBg();
+    doc.setTextColor(99, 102, 241); doc.setFontSize(14); doc.setFont(undefined!, 'bold');
+    doc.text("3. THE TOP 10 SHORTLIST", 20, 30);
+    
     autoTable(doc, {
-      head: [["Rank", "Candidate", "Proof Score", "Evidence", "Risk Gap", "Type", "Action"]],
+      head: [["Rank", "Candidate / Role", "Proof", "Evidence", "Risk", "Type", "Confidence"]],
       body: candidates.map(c => [
-        c.rank, c.candidateName,
-        `${c.proofOfSuccessScore}%`, `${c.evidenceStrength}%`,
+        `#${c.rank} (ATS: ${c.atsRank || '-'})`, 
+        `${c.candidateName}\n${c.currentRole}\nExp: ${c.totalExperienceYears}y | ${c.location}`,
+        `${c.proofOfSuccessScore}%`, 
+        `${c.evidenceStrength}%`,
         `${c.riskGapScore}%`,
         c.candidateType.replace('_', ' '),
-        c.recommendedAction
+        c.confidenceLevel
       ]),
-      startY: 70,
+      startY: 40,
       theme: 'grid',
-      styles: { fontSize: 8, textColor: [200,200,200], fillColor: [15,17,22] },
+      styles: { fontSize: 8, textColor: [200,200,200], fillColor: [15,17,22], cellPadding: 3 },
       headStyles: { fillColor: [16, 185, 129], textColor: [0,0,0], fontStyle: 'bold' },
-      alternateRowStyles: { fillColor: [20,22,28] }
+      alternateRowStyles: { fillColor: [20,22,28] },
+      columnStyles: { 1: { cellWidth: 50 } }
     });
+    addFooter(3);
 
-    // Disclaimer
-    const finalY = (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
-    doc.setTextColor(100,100,100); doc.setFontSize(7);
-    doc.text("Responsible AI: Rankings are for decision-support only. Final hiring decisions must be made by qualified human reviewers.", 14, finalY);
-    doc.text("Rankings exclude protected attributes. All scoring is based on professional qualifications and work evidence only.", 14, finalY + 4);
+    // --- PAGE 4: Deep Dive Profiles ---
+    doc.addPage(); setDarkBg();
+    doc.setTextColor(99, 102, 241); doc.setFontSize(14); doc.setFont(undefined!, 'bold');
+    doc.text("4. DEEP DIVE: TOP CANDIDATES", 20, 30);
+    
+    let currentY = 45;
+    candidates.slice(0, 4).forEach((c, index) => {
+      if (currentY > 230) {
+        addFooter(doc.getCurrentPageInfo().pageNumber);
+        doc.addPage(); setDarkBg();
+        currentY = 30;
+      }
+      
+      doc.setFillColor(20, 22, 28);
+      doc.rect(20, currentY, 170, 50, 'F');
+      
+      doc.setTextColor(16, 185, 129); doc.setFontSize(12); doc.setFont(undefined!, 'bold');
+      doc.text(`#${c.rank} - ${c.candidateName} (${c.candidateType.replace('_', ' ')})`, 25, currentY + 10);
+      
+      doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont(undefined!, 'italic');
+      doc.text(`"${c.oneLineExplanation}"`, 25, currentY + 18, { maxWidth: 160 });
+      
+      doc.setTextColor(200, 200, 200); doc.setFontSize(8); doc.setFont(undefined!, 'normal');
+      doc.text(`Evidence Trail:`, 25, currentY + 28);
+      doc.setTextColor(150, 150, 150);
+      doc.text(c.evidenceTrail.slice(0, 2).map(t => `• ${t}`).join('\n'), 25, currentY + 34, { maxWidth: 160 });
+      
+      currentY += 60;
+    });
+    addFooter(doc.getCurrentPageInfo().pageNumber);
 
-    doc.save("RankForge_Evidence_Hiring_Brief.pdf");
+    doc.save("RankForge_Executive_Hiring_Brief.pdf");
   };
 
   const hiddenGems = candidates.filter(c => c.candidateType === 'HIDDEN_GEM');
@@ -480,6 +556,7 @@ export default function Home() {
                     <td className="px-6 py-5">
                       <p className="font-bold text-white text-sm">{c.candidateName}</p>
                       <p className="text-slate-600 text-xs mt-0.5">{c.currentRole} · {c.totalExperienceYears}y · {c.location}</p>
+                      <p className="text-slate-400 text-xs mt-1.5 italic">"{c.oneLineExplanation}"</p>
                       <div className="mt-2 flex flex-wrap gap-1">
                         {c.keyMatchingSkills.slice(0,3).map((s,j) => (
                           <span key={j} className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] border border-white/8 text-slate-500">{s}</span>
